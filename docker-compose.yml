@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  rails-api:
+    container_name: rails-api
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    environment:
+      - PORT=3000
+    volumes:
+      - .:/app
+    ports:
+      - 3001:3000
+    depends_on:
+      - mongo-service
+
+  mongo-service:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: matheus
+      MONGO_INITDB_ROOT_PASSWORD: 123123
+      MONGO_INITDB_DATABASE: tudu_db
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/var/lib/mongodb/data
+
+volumes:
+  mongodb:
+    driver: local
