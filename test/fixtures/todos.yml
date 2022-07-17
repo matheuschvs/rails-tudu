@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  status: MyString
+  title: MyString
+  description: MyString
+  deadline: 2022-07-17
+
+two:
+  status: MyString
+  title: MyString
+  description: MyString
+  deadline: 2022-07-17

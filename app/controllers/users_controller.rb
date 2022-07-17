@@ -1,11 +1,23 @@
 class UsersController < ApplicationController
   before_action :set_user, only: %i[ show update destroy ]
+  skip_before_action :authenticate_request, :only => [:create]
 
   # GET /users
   def index
-    @users = User.all
+    if !params[:email]
+      @users = User.all
+    else
+      @users = User.find_by(email: params[:email])
+    end
 
     render json: @users
+  end
+  
+  # GET /profile
+  def me
+    @user = @current_user
+
+    render json: @user
   end
 
   # GET /users/1
