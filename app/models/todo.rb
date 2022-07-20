@@ -9,6 +9,8 @@ class Todo
   belongs_to :owner, class_name: "User", inverse_of: :todos
   belongs_to :category
   has_and_belongs_to_many :members, class_name: "User", inverse_of: nil
+  embeds_many :tasks
+  embeds_many :comments
 
   validates :title, presence: true
   validates :description, presence: true

@@ -17,6 +17,8 @@ gem "bcrypt", "~> 3.1.7"
 
 gem "bson_ext"
 
+gem "rack-cors"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 

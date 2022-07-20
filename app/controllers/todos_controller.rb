@@ -3,7 +3,7 @@ class TodosController < ApplicationController
 
   # GET /todos
   def index
-    owned_todos = Todo.where('owner_id': @current_user._id)
+    owned_todos = Todo.where('owner_id': @current_user._id).includes(:category)
     member_todos = Todo.all.select { |t|  
       t.member_ids.any? { |m|
         m == @current_user._id
@@ -85,7 +85,26 @@ class TodosController < ApplicationController
 
   # PATCH/PUT /todos/1
   def update
-    if @todo.update(todo_params)
+    if !unique_title?
+      render json: { error: 'Duplicate title' }, status: :unprocessable_entity
+      return
+    end
+
+    if todo_params[:category] && !valid_category?
+      render json: { error: 'Category not found' }, status: :unprocessable_entity
+      return
+    end
+
+    if todo_params[:status] != "WAITING" && todo_params[:status] != "DONE"
+      render json: { error: 'Invalid status' }, status: :unprocessable_entity
+      return
+    end
+
+    category = @current_user.categories.find { |c|
+      c[:_id].to_json == @todo.category_id.to_json
+    }
+
+    if @todo.update({category: category, **todo_params})
       render json: @todo
     else
       render json: @todo.errors, status: :unprocessable_entity
@@ -108,7 +127,7 @@ class TodosController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def todo_params
-      params.require(:todo).permit(:category, :title, :description, :deadline)
+      params.require(:todo).permit(:status, :category, :title, :description, :deadline)
     end
 
     def unique_title?
