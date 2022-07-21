@@ -49,18 +49,20 @@ class TasksController < ApplicationController
 
   private
     def set_todo
-      @todo = Todo.where('owner_id': @current_user._id).find { |t|
-        tid = { :$oid => params[:id] }
-        t[:_id].to_json == tid.to_json
-      }
+      # @todo = Todo.where('owner_id': @current_user._id).find { |t|
+      #   tid = { :$oid => params[:id] }
+      #   t[:_id].to_json == tid.to_json
+      # }
+      @todo = Todo.find(params[:id])
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_task
-      @todo = Todo.where('owner_id': @current_user._id).find { |t|
-          tid = { :$oid => params[:id] }
-          t[:_id].to_json == tid.to_json
-        }
+      # @todo = Todo.where('owner_id': @current_user._id).find { |t|
+      #     tid = { :$oid => params[:id] }
+      #     t[:_id].to_json == tid.to_json
+      #   }
+      @todo = Todo.find(params[:id])
       @task = @todo.tasks.find { |t|
         tid = { :$oid => params[:task_id] }
         t[:_id].to_json == tid.to_json

@@ -1,5 +1,5 @@
 class CommentsController < ApplicationController
-  before_action :set_comment, only: %i[ show update destroy ]
+  before_action :set_comment, only: %i[ create show update destroy ]
   before_action :set_todo, only: %i[ create ]
 
   # GET /comments
@@ -44,18 +44,16 @@ class CommentsController < ApplicationController
 
   private
     def set_todo
-      @todo = Todo.where('owner_id': @current_user._id).find { |t|
-        tid = { :$oid => params[:id] }
-        t[:_id].to_json == tid.to_json
-      }
+      # @todo = Todo.where('owner_id': @current_user._id).find { |t|
+      #   tid = { :$oid => params[:id] }
+      #   t[:_id].to_json == tid.to_json
+      # }
+      @todo = Todo.find(params[:id])
     end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_comment
-      @todo = Todo.where('owner_id': @current_user._id).find { |t|
-          tid = { :$oid => params[:id] }
-          t[:_id].to_json == tid.to_json
-        }
+      @todo = Todo.find(params[:id])
       @comment = @todo.comments.find { |c|
         cid = { :$oid => params[:comment_id] }
         c[:_id].to_json == cid.to_json

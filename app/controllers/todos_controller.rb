@@ -4,6 +4,7 @@ class TodosController < ApplicationController
   # GET /todos
   def index
     owned_todos = Todo.where('owner_id': @current_user._id).includes(:category)
+      
     member_todos = Todo.all.select { |t|  
       t.member_ids.any? { |m|
         m == @current_user._id
@@ -122,7 +123,15 @@ class TodosController < ApplicationController
       @todo = Todo.where('owner_id': @current_user._id).find { |t|
         tid = { :$oid => params[:id] }
         t[:_id].to_json == tid.to_json
-    }
+      }
+
+      if !@todo
+        @todo = Todo.all.select { |t|  
+          t.member_ids.any? { |m|
+            m == @current_user._id
+          }
+        }.first
+      end
     end
 
     # Only allow a list of trusted parameters through.
