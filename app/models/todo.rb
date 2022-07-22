@@ -13,7 +13,6 @@ class Todo
   embeds_many :comments
 
   validates :title, presence: true
-  validates :description, presence: true
   validates :deadline, presence: true
   validates :category, presence: true, on: :create
 end
